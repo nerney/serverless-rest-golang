@@ -1,0 +1,12 @@
+version: 0.2
+
+phases: 
+  pre_build: 
+    commands:
+      - sh scripts/test.sh
+  build:
+    commands:
+      - sh scripts/build.sh
+  post_build:
+    commands:
+      - sh scripts/deploy.sh
