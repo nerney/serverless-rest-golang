@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"go-sls-rest/models"
-	"go-sls-rest/service"
+	"github.com/nerney/serverless-rest-golang/models"
+	"github.com/nerney/serverless-rest-golang/service"
 	"net/http"
 	"strings"
 )

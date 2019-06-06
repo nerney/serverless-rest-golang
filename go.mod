@@ -1,4 +1,4 @@
-module go-sls-rest
+module github.com/nerney/serverless-rest-golang
 
 go 1.12
 

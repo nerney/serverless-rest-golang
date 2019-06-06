@@ -1,7 +1,7 @@
 package main
 
 import (
-	"go-sls-rest/handlers"
+	"github.com/nerney/serverless-rest-golang/handlers"
 
 	"github.com/aws/aws-lambda-go/lambda"
 )

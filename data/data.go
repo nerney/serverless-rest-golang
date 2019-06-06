@@ -1,7 +1,7 @@
 package data
 
 import (
-	"go-sls-rest/models"
+	"github.com/nerney/serverless-rest-golang/models"
 	"os"
 
 	"github.com/patrickmn/go-cache"

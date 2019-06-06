@@ -1,7 +1,7 @@
 package service
 
 import (
-	"go-sls-rest/models"
+	"github.com/nerney/serverless-rest-golang/models"
 
 	"reflect"
 	"testing"

@@ -3,7 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"go-sls-rest/models"
+	"github.com/nerney/serverless-rest-golang/models"
 	"net/http"
 	"reflect"
 	"testing"

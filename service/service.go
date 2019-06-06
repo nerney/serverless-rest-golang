@@ -2,8 +2,8 @@ package service
 
 import (
 	"errors"
-	"go-sls-rest/data"
-	"go-sls-rest/models"
+	"github.com/nerney/serverless-rest-golang/data"
+	"github.com/nerney/serverless-rest-golang/models"
 
 	"github.com/teris-io/shortid"
 )

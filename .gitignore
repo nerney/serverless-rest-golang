@@ -8,3 +8,4 @@ bin
 *.dylib
 *.test
 *.out
+coverage.*
