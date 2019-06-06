@@ -1,8 +1,9 @@
 package data
 
 import (
-	"github.com/nerney/serverless-rest-golang/models"
 	"os"
+
+	"github.com/nerney/serverless-rest-golang/models"
 
 	"github.com/patrickmn/go-cache"
 )
@@ -37,7 +38,7 @@ func GetOne(id string) *models.Item {
 	return nil
 }
 
-// Puts a new item into the data store or updates an existing one.
+// Put a new item into the data store or updates an existing one.
 func Put(item models.Item) *models.Item {
 	c.SetDefault(item.ID, item)
 	return &item

@@ -13,11 +13,11 @@ func TestGetAll(t *testing.T) {
 		want []models.Item
 	}{
 		{"Should Get All", []models.Item{
-			models.Item{
+			{
 				ID:  "1",
 				Txt: models.ItemTxt{Txt: "one"},
 			},
-			models.Item{
+			{
 				ID:  "2",
 				Txt: models.ItemTxt{Txt: "two"},
 			}}},
@@ -26,11 +26,11 @@ func TestGetAll(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := GetAll(); !reflect.DeepEqual(got, tt.want) {
 				if !reflect.DeepEqual(got, []models.Item{
-					models.Item{
+					{
 						ID:  "2",
 						Txt: models.ItemTxt{Txt: "two"},
 					},
-					models.Item{
+					{
 						ID:  "1",
 						Txt: models.ItemTxt{Txt: "one"},
 					}}) {

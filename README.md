@@ -2,7 +2,7 @@
 
 ![Build Status](https://travis-ci.com/nerney/serverless-rest-golang.svg?branch=master)
 [![Test Coverage](https://codecov.io/gh/nerney/serverless-rest-golang/branch/master/graph/badge.svg)](https://codecov.io/gh/nerney/serverless-rest-golang)
-![Go Report Card](https://goreportcard.com/badge/github.com/nerney/serverless-rest-golang)
+[![Go Report Card](https://goreportcard.com/badge/github.com/nerney/serverless-rest-golang)](https://goreportcard.com/report/github.com/nerney/serverless-rest-golang)
 
 ## Goals
 
