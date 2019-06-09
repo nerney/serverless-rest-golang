@@ -6,7 +6,7 @@ import (
 	"github.com/nerney/serverless-rest-golang/data"
 	"github.com/nerney/serverless-rest-golang/models"
 
-	"github.com/teris-io/shortid"
+	uuid "github.com/satori/go.uuid"
 )
 
 // GetAll items or return an empty array.
@@ -24,7 +24,7 @@ func GetOne(id string) (models.Item, error) {
 
 // Create a new item and return it with the newly generated id.
 func Create(item models.Item) models.Item {
-	return *data.Put(models.Item{ID: shortid.MustGenerate(), Data: item})
+	return *data.Put(models.Item{ID: uuid.NewV4().String(), Data: item})
 }
 
 // Update an existing item, returns an error if not found.
