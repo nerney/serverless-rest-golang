@@ -3,7 +3,11 @@ service: serverless-rest-golang
 provider:
   name: aws
   runtime: go1.x
-  memorySize: 128
+  iamRoleStatements:
+    -  Effect: "Allow"
+       Action:
+         - "s3:*"
+       Resource: "*"
 
 package:
   exclude:
@@ -21,3 +25,10 @@ functions:
       - http:
           path: items/{id}
           method: any
+
+resources:
+  Resources:
+    restItemBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: serverless-rest-golang-items

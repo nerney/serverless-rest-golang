@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"github.com/nerney/serverless-rest-golang/models"
 	"net/http"
@@ -53,7 +52,7 @@ func Test_get(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := get(tt.args.req); !reflect.DeepEqual(got.StatusCode, tt.want.StatusCode) {
+			if got := Get(tt.args.req); !reflect.DeepEqual(got.StatusCode, tt.want.StatusCode) {
 				t.Errorf("get() = %v, want %v", got.StatusCode, tt.want.StatusCode)
 			}
 		})
@@ -61,7 +60,7 @@ func Test_get(t *testing.T) {
 }
 
 func Test_post(t *testing.T) {
-	body, _ := json.Marshal(models.ItemTxt{Txt: "hello"})
+	body, _ := json.Marshal(models.Item{Data: "hello"})
 	type args struct {
 		req models.Request
 	}
@@ -79,7 +78,7 @@ func Test_post(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := post(tt.args.req); !reflect.DeepEqual(got.StatusCode, tt.want.StatusCode) {
+			if got := Post(tt.args.req); !reflect.DeepEqual(got.StatusCode, tt.want.StatusCode) {
 				t.Errorf("post() = %v, want %v", got.StatusCode, tt.want.StatusCode)
 			}
 		})
@@ -87,7 +86,7 @@ func Test_post(t *testing.T) {
 }
 
 func Test_put(t *testing.T) {
-	body, _ := json.Marshal(models.ItemTxt{Txt: "hello"})
+	body, _ := json.Marshal(models.Item{Data: "hello"})
 	type args struct {
 		req models.Request
 	}
@@ -106,6 +105,11 @@ func Test_put(t *testing.T) {
 				PathParameters: map[string]string{"id": "2"},
 				Body:           "fail"}},
 			models.Response{StatusCode: http.StatusBadRequest}},
+		{"Should fail bad request",
+			args{req: models.Request{
+				PathParameters: nil,
+				Body:           "fail"}},
+			models.Response{StatusCode: http.StatusBadRequest}},
 		{"Should fail not found",
 			args{req: models.Request{
 				PathParameters: map[string]string{"id": "69420"},
@@ -114,7 +118,7 @@ func Test_put(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := put(tt.args.req); !reflect.DeepEqual(got.StatusCode, tt.want.StatusCode) {
+			if got := Put(tt.args.req); !reflect.DeepEqual(got.StatusCode, tt.want.StatusCode) {
 				t.Errorf("put() = %v, want %v", got.StatusCode, tt.want.StatusCode)
 			}
 		})
@@ -136,57 +140,14 @@ func Test_delete(t *testing.T) {
 		{"Should fail not found",
 			args{req: models.Request{PathParameters: map[string]string{"id": "999"}}},
 			models.Response{StatusCode: http.StatusNotFound}},
+		{"Should fail bad request",
+			args{req: models.Request{PathParameters: nil}},
+			models.Response{StatusCode: http.StatusBadRequest}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := delete(tt.args.req); !reflect.DeepEqual(got, tt.want) {
+			if got := Delete(tt.args.req); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("delete() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestRest(t *testing.T) {
-	type args struct {
-		in0 context.Context
-		req models.Request
-	}
-	tests := []struct {
-		name string
-		args args
-	}{
-		{"Should GET",
-			args{in0: nil, req: models.Request{
-				HTTPMethod: "get",
-			}}},
-		{"Should POST",
-			args{in0: nil, req: models.Request{
-				HTTPMethod: "post",
-			}}},
-		{"Should PUT",
-			args{in0: nil, req: models.Request{
-				HTTPMethod: "put",
-			}}},
-		{"Should DELETE",
-			args{in0: nil, req: models.Request{
-				HTTPMethod: "delete",
-			}}},
-		{"Should fail method not allowed",
-			args{in0: nil, req: models.Request{
-				HTTPMethod: "options",
-			}}},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, _ := Rest(tt.args.in0, tt.args.req)
-			if tt.args.req.HTTPMethod == "options" {
-				if !reflect.DeepEqual(got, methodNotAllowedResponse) {
-					t.Errorf("Rest() = %v, want %v", got.StatusCode, http.StatusMethodNotAllowed)
-				}
-			} else {
-				if got.StatusCode == http.StatusMethodNotAllowed {
-					t.Errorf("Rest() = %v, want %v", got.StatusCode, "Any Status Code except 405")
-				}
 			}
 		})
 	}

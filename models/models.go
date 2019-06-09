@@ -1,22 +1,20 @@
 package models
 
-import (
-	"github.com/aws/aws-lambda-go/events"
-)
+// Request type
+type Request struct {
+	HTTPMethod     string            `json:"httpMethod"`
+	PathParameters map[string]string `json:"pathParameters,omitempty"`
+	Body           string            `json:"body,omitempty"`
+}
 
-// Request from API Gateway
-type Request events.APIGatewayProxyRequest
-
-// Response from API Gateway
-type Response events.APIGatewayProxyResponse
+// Response type
+type Response struct {
+	StatusCode int    `json:"statusCode"`
+	Body       string `json:"body,omitempty"`
+}
 
 // Item resource
 type Item struct {
-	ID  string  `json:"id"`
-	Txt ItemTxt `json:"txt"`
-}
-
-// ItemTxt content for Item struct
-type ItemTxt struct {
-	Txt string `json:"txt"`
+	ID   string      `json:"id,omitempty"`
+	Data interface{} `json:"data"`
 }

@@ -1,19 +1,17 @@
 package handlers
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
+	"net/http"
+
 	"github.com/nerney/serverless-rest-golang/models"
 	"github.com/nerney/serverless-rest-golang/service"
-	"net/http"
-	"strings"
 )
 
 var (
-	methodNotAllowedResponse = models.Response{StatusCode: http.StatusMethodNotAllowed}
-	notFoundResponse         = models.Response{StatusCode: http.StatusNotFound}
-	badRequestResponse       = models.Response{StatusCode: http.StatusBadRequest}
+	notFoundResponse   = models.Response{StatusCode: http.StatusNotFound}
+	badRequestResponse = models.Response{StatusCode: http.StatusBadRequest}
 )
 
 // Builds an ok response with a body.
@@ -21,8 +19,8 @@ func okResponse(body interface{}) models.Response {
 	return models.Response{StatusCode: http.StatusOK, Body: fmt.Sprintf("%v", body)}
 }
 
-// Handles get one and get all requests
-func get(req models.Request) models.Response {
+// Get handles get one and get all requests
+func Get(req models.Request) models.Response {
 	var (
 		body []byte
 		err  error
@@ -44,30 +42,30 @@ func get(req models.Request) models.Response {
 	return okResponse(string(body))
 }
 
-// Handles post requests
-func post(req models.Request) models.Response {
-	var txt models.ItemTxt
-	if json.Unmarshal([]byte(req.Body), &txt) != nil {
+// Post handles post requests
+func Post(req models.Request) models.Response {
+	item := models.Item{}
+	if json.Unmarshal([]byte(req.Body), &item) != nil {
 		return badRequestResponse
 	}
-	body, err := json.Marshal(service.Create(txt))
+	body, err := json.Marshal(service.Create(item))
 	if err != nil {
 		panic(err)
 	}
 	return okResponse(string(body))
 }
 
-// Handles put requests
-func put(req models.Request) models.Response {
+// Put handles put requests
+func Put(req models.Request) models.Response {
 	id := req.PathParameters["id"]
 	if id == "" {
 		return badRequestResponse
 	}
-	var txt models.ItemTxt
-	if json.Unmarshal([]byte(req.Body), &txt) != nil {
+	var item models.Item
+	if json.Unmarshal([]byte(req.Body), &item) != nil {
 		return badRequestResponse
 	}
-	item := models.Item{ID: id, Txt: txt}
+	item = models.Item{ID: id, Data: item}
 	if service.Update(item) != nil {
 		return badRequestResponse
 	}
@@ -78,8 +76,8 @@ func put(req models.Request) models.Response {
 	return okResponse(string(body))
 }
 
-// Handles delete requests
-func delete(req models.Request) models.Response {
+// Delete handles delete requests
+func Delete(req models.Request) models.Response {
 	id := req.PathParameters["id"]
 	if id == "" {
 		return badRequestResponse
@@ -88,21 +86,4 @@ func delete(req models.Request) models.Response {
 		return notFoundResponse
 	}
 	return models.Response{StatusCode: http.StatusNoContent}
-}
-
-// Rest handler will accept an incoming request
-// and pass it along to the appropriate method handler
-// which will then return a response.
-func Rest(_ context.Context, req models.Request) (models.Response, error) {
-	switch strings.ToUpper(req.HTTPMethod) {
-	case "GET":
-		return get(req), nil
-	case "POST":
-		return post(req), nil
-	case "PUT":
-		return put(req), nil
-	case "DELETE":
-		return delete(req), nil
-	}
-	return methodNotAllowedResponse, nil
 }

@@ -11,19 +11,6 @@ The goal here is to acheive a fully serverless REST endpoint. By "fully serverle
 This is accomplished through a single lambda function that handles crud methods (`GET`,`POST`,`PUT`,`DELETE`).
 The serverless environment uses an in-memory cache for holding the data, but ultimately, I would like to have changes immediately synced to s3.
 
-#### Status
-
-Done
-
-- the REST lambda to handle all the CRUD operations.
-
-ToDo
-
-- the persistence layer:
-
-  basically, we need to bootstrap the application to pull in the cache from s3 on init, if there isn't one, just create a new one (should only happen on first init), then sync any changes as they occur. 
-  to really do this right we will want some `defer` logic to handle doing a final sync (if any updates have occured while the lambda was hot). to be truly serverless we will need to always make sure when performing a sync that we are not overwriting changes that may have occured in some other concurrent lambda, so we will need to diff those guys and make sure they always include everything.
-
 ## Requirements
 
 - Node.js
@@ -35,8 +22,8 @@ ToDo
 
 Deploying this service to an AWS environment can be accomplished in more than one way:
 
-* From your local machine, it will deploy using your locally configured AWS credentials.
-* From AWS CodeBuild, using the default `buildspec.yml`
+- From your local machine, it will deploy using your locally configured AWS credentials.
+- From AWS CodeBuild, using the default `buildspec.yml`
 
 ## Scripts
 

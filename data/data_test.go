@@ -1,9 +1,10 @@
 package data
 
 import (
-	"github.com/nerney/serverless-rest-golang/models"
 	"reflect"
 	"testing"
+
+	"github.com/nerney/serverless-rest-golang/models"
 )
 
 func TestGetAll(t *testing.T) {
@@ -13,26 +14,20 @@ func TestGetAll(t *testing.T) {
 	}{
 		{"Should Get All",
 			[]models.Item{
-				{
-					ID:  "1",
-					Txt: models.ItemTxt{Txt: "one"},
-				},
-				{
-					ID:  "2",
-					Txt: models.ItemTxt{Txt: "two"},
-				}}},
+				{ID: "1", Data: "one"},
+				{ID: "2", Data: "two"}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := GetAll(); !reflect.DeepEqual(got, tt.want) {
 				if !reflect.DeepEqual(got, []models.Item{
 					{
-						ID:  "2",
-						Txt: models.ItemTxt{Txt: "two"},
+						ID:   "2",
+						Data: "two",
 					},
 					{
-						ID:  "1",
-						Txt: models.ItemTxt{Txt: "one"},
+						ID:   "1",
+						Data: "one",
 					}}) {
 					t.Errorf("GetAll() = %v, want %v", got, tt.want)
 				}
@@ -50,7 +45,7 @@ func TestGetOne(t *testing.T) {
 		args args
 		want *models.Item
 	}{
-		{"Should Get One", args{id: "1"}, &models.Item{ID: "1", Txt: models.ItemTxt{Txt: "one"}}},
+		{"Should Get One", args{id: "1"}, &models.Item{ID: "1", Data: "one"}},
 		{"Should Not Get One", args{id: "666"}, nil},
 	}
 	for _, tt := range tests {
@@ -63,21 +58,19 @@ func TestGetOne(t *testing.T) {
 }
 
 func TestPut(t *testing.T) {
-	i := models.Item{ID: "666", Txt: models.ItemTxt{Txt: "beast"}}
 	type args struct {
 		item models.Item
 	}
 	tests := []struct {
 		name string
 		args args
-		want *models.Item
 	}{
-		{"Should Put", args{item: i}, &i},
+		{"Should Put", args{item: models.Item{ID: "666", Data: "beast"}}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Put(tt.args.item); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Put() = %v, want %v", got, tt.want)
+			if got := Put(tt.args.item); !reflect.DeepEqual(got, &models.Item{ID: "666", Data: "beast"}) {
+				t.Errorf("Put() wrong %v", got)
 			}
 		})
 	}

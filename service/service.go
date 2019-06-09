@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+
 	"github.com/nerney/serverless-rest-golang/data"
 	"github.com/nerney/serverless-rest-golang/models"
 
@@ -22,8 +23,8 @@ func GetOne(id string) (models.Item, error) {
 }
 
 // Create a new item and return it with the newly generated id.
-func Create(txt models.ItemTxt) models.Item {
-	return *data.Put(models.Item{ID: shortid.MustGenerate(), Txt: txt})
+func Create(item models.Item) models.Item {
+	return *data.Put(models.Item{ID: shortid.MustGenerate(), Data: item})
 }
 
 // Update an existing item, returns an error if not found.

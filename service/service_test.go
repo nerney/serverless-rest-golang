@@ -14,12 +14,12 @@ func TestGetAll(t *testing.T) {
 	}{
 		{"Should Get All", []models.Item{
 			{
-				ID:  "1",
-				Txt: models.ItemTxt{Txt: "one"},
+				ID:   "1",
+				Data: "one",
 			},
 			{
-				ID:  "2",
-				Txt: models.ItemTxt{Txt: "two"},
+				ID:   "2",
+				Data: "two",
 			}}},
 	}
 	for _, tt := range tests {
@@ -27,12 +27,12 @@ func TestGetAll(t *testing.T) {
 			if got := GetAll(); !reflect.DeepEqual(got, tt.want) {
 				if !reflect.DeepEqual(got, []models.Item{
 					{
-						ID:  "2",
-						Txt: models.ItemTxt{Txt: "two"},
+						ID:   "2",
+						Data: "two",
 					},
 					{
-						ID:  "1",
-						Txt: models.ItemTxt{Txt: "one"},
+						ID:   "1",
+						Data: "one",
 					}}) {
 					t.Errorf("GetAll() = %v, want %v", got, tt.want)
 				}
@@ -51,7 +51,7 @@ func TestGetOne(t *testing.T) {
 		want    models.Item
 		wantErr bool
 	}{
-		{"Should Get One", args{id: "1"}, models.Item{ID: "1", Txt: models.ItemTxt{Txt: "one"}}, false},
+		{"Should Get One", args{id: "1"}, models.Item{ID: "1", Data: "one"}, false},
 		{"Should Not Get One", args{id: "999"}, models.Item{}, true},
 	}
 	for _, tt := range tests {
@@ -61,28 +61,28 @@ func TestGetOne(t *testing.T) {
 				t.Errorf("GetOne() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("GetOne() = %v, want %v", got, tt.want)
+			if got.ID != tt.want.ID || !reflect.DeepEqual(got.Data, tt.want.Data) {
+				t.Errorf("GetOne() = %v, want %v", got.Data, tt.want.Data)
 			}
 		})
 	}
 }
 
 func TestCreate(t *testing.T) {
-	txt := models.ItemTxt{Txt: "test"}
+	Data := models.Item{Data: "test"}
 	type args struct {
-		txt models.ItemTxt
+		Data models.Item
 	}
 	tests := []struct {
 		name string
 		args args
-		want models.ItemTxt
+		want models.Item
 	}{
-		{"Should Create", args{txt: txt}, txt},
+		{"Should Create", args{Data: Data}, Data},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Create(tt.args.txt); !reflect.DeepEqual(got.Txt, tt.want) {
+			if got := Create(tt.args.Data); !reflect.DeepEqual(got.Data, tt.want) {
 				t.Errorf("Create() = %v, wanted with text %v", got, tt.want)
 			}
 		})
