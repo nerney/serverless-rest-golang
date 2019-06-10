@@ -3,6 +3,7 @@ service: serverless-rest-golang
 provider:
   name: aws
   runtime: go1.x
+  memorySize: 128
   iamRoleStatements:
     -  Effect: "Allow"
        Action:

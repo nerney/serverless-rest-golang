@@ -11,8 +11,8 @@ import (
 
 // where the lambda enters
 func main() {
-	defer storage.Sync()
 	lambda.Start(func(_ context.Context, req models.Request) (models.Response, error) {
+		defer storage.Sync()
 		return api.Rest(req), nil
 	})
 }
