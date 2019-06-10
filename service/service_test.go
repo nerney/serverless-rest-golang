@@ -82,7 +82,7 @@ func TestCreate(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Create(tt.args.Data); !reflect.DeepEqual(got.Data, tt.want) {
+			if got := Create(tt.args.Data); !reflect.DeepEqual(got.Data, tt.want.Data) {
 				t.Errorf("Create() = %v, wanted with text %v", got, tt.want)
 			}
 		})

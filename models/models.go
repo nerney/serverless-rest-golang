@@ -15,6 +15,6 @@ type Response struct {
 
 // Item resource
 type Item struct {
-	ID   string      `json:"id,omitempty"`
-	Data interface{} `json:"data"`
+	ID   string `json:"id,omitempty"`
+	Data string `json:"data,omitempty"`
 }

@@ -65,7 +65,7 @@ func Put(req models.Request) models.Response {
 	if json.Unmarshal([]byte(req.Body), &item) != nil {
 		return badRequestResponse
 	}
-	item = models.Item{ID: id, Data: item}
+	item = models.Item{ID: id, Data: item.Data}
 	if service.Update(item) != nil {
 		return badRequestResponse
 	}

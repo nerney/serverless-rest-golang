@@ -92,3 +92,14 @@ func TestDelete(t *testing.T) {
 		})
 	}
 }
+
+func TestExportIfAltered(t *testing.T) {
+	c.Altered = false
+	if ExportIfAltered() != nil {
+		t.Fail()
+	}
+	Put(models.Item{ID: "38942398", Data: "dataatatat"})
+	if ExportIfAltered() == nil {
+		t.Fail()
+	}
+}

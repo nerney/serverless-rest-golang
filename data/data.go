@@ -7,10 +7,15 @@ import (
 	"github.com/patrickmn/go-cache"
 )
 
-var c *cache.Cache
+type datastore struct {
+	*cache.Cache
+	Altered bool
+}
+
+var c datastore
 
 func init() {
-	c = cache.New(cache.NoExpiration, cache.NoExpiration)
+	c = datastore{cache.New(cache.NoExpiration, cache.NoExpiration), false}
 
 	// throw a couple things in a cache for testing
 	if os.Getenv("TESTING") != "" {
@@ -18,6 +23,14 @@ func init() {
 		c.SetDefault("2", models.Item{ID: "2", Data: "two"})
 		return
 	}
+}
+
+// ExportIfAltered returns an altered cache, or nil if unaltered
+func ExportIfAltered() []models.Item {
+	if c.Altered {
+		return GetAll()
+	}
+	return nil
 }
 
 // GetAll items from the data cache.
@@ -41,10 +54,13 @@ func GetOne(id string) *models.Item {
 // Put a new item into the data cache or updates an existing one.
 func Put(item models.Item) *models.Item {
 	c.SetDefault(item.ID, item)
+	c.Altered = true
 	return &item
 }
 
 // Delete an item from the data cache by id
 func Delete(id string) {
 	c.Delete(id)
+	c.Altered = true
+	return
 }
