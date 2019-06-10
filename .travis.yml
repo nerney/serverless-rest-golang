@@ -1,5 +1,5 @@
 language: go
-script: sh scripts/test.sh
+script: GO111MODULE=on sh scripts/test.sh
 after_success: bash <(curl -s https://codecov.io/bash) || echo "Code coverage was not collected!!!???!"
 
 
