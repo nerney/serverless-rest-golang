@@ -9,10 +9,12 @@ import (
 	"github.com/nerney/serverless-rest-golang/storage"
 )
 
-// where the lambda enters
 func main() {
+	defer storage.Sync()
 	lambda.Start(func(_ context.Context, req models.Request) (models.Response, error) {
-		defer storage.Sync()
+		defer func() {
+			go storage.Sync()
+		}()
 		return api.Rest(req), nil
 	})
 }

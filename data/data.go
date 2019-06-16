@@ -28,6 +28,7 @@ func init() {
 // ExportIfAltered returns an altered cache, or nil if unaltered
 func ExportIfAltered() []models.Item {
 	if c.Altered {
+		c.Altered = false
 		return GetAll()
 	}
 	return nil

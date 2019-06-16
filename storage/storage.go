@@ -19,61 +19,61 @@ var (
 
 // Sync datastore with bucket
 func Sync() {
-	if items := data.ExportIfAltered(); items != nil {
-		if b, err := json.Marshal(items); err != nil {
-			panic(err)
-		} else {
-			bucketSync(b)
+	storageItems := getItemsFromStorage()
+	memItems := data.ExportIfAltered()
+	
+	
+	
+	; items != nil {
+		if b, err := json.Marshal(items); err == nil {
+			sync(b)
 		}
 	}
 }
 
-func bucketSync(mem []byte) {
+func getItemsFromStorage() []models.Item {
 	if o, err := client.GetObject(&s3.GetObjectInput{
 		Bucket: bucket,
 		Key:    key,
-	}); err != nil {
-		panic(err)
-	} else {
+	}); err == nil {
 		defer o.Body.Close()
 		storage := []byte{}
 		if _, err := o.Body.Read(storage); err != nil {
-			panic(err)
+			return nil
 		}
+		items := []models.Item{}
+		if json.Unmarshal(storage, &items) != nil {
+			return nil
+		}
+		return items
+	}
+	return nil
+}
+
+func sync(mem []byte) {
+	storageItems := getItemsFromStorage()
+
 		client.PutObject(&s3.PutObjectInput{
 			Bucket: bucket,
 			Key:    key,
-			Body:   merge(mem, storage),
+			Body:   mergeBytes(mem, storage),
 		})
 	}
 }
 
-func merge(mem, storage []byte) *bytes.Reader {
-	merged := []models.Item{}
+func mergeBytes(mem, storage []byte) *bytes.Reader {
 
-	items := []models.Item{}
-	if err := json.Unmarshal(mem, &items); err != nil {
+	memItems := []models.Item{}
+	if err := json.Unmarshal(mem, &memItems); err != nil {
 		panic(err)
 	}
 
-	merged = append(merged, items...)
-
-	items = []models.Item{}
-	if err := json.Unmarshal(storage, &items); err != nil {
+	storageItems := []models.Item{}
+	if err := json.Unmarshal(storage, &storageItems); err != nil {
 		panic(err)
 	}
 
-	merged = append(merged, items...)
-
-	itemMap := map[string]models.Item{}
-	for _, item := range merged {
-		itemMap[item.ID] = item
-	}
-
-	merged = []models.Item{}
-	for _, item := range itemMap {
-		merged = append(merged, item)
-	}
+	merged := mergeItems(memItems, storageItems)
 
 	b, err := json.Marshal(merged)
 	if err != nil {
@@ -81,4 +81,16 @@ func merge(mem, storage []byte) *bytes.Reader {
 	}
 
 	return bytes.NewReader(b)
+}
+
+func mergeItems(memItems, storageItems []models.Item) []models.Item {
+	itemMap := map[string]models.Item{}
+	for _, item := range append(memItems, storageItems...) {
+		itemMap[item.ID] = item
+	}
+	merged := []models.Item{}
+	for _, item := range itemMap {
+		merged = append(merged, item)
+	}
+	return merged
 }
